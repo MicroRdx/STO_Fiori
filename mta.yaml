@@ -1,0 +1,90 @@
+_schema-version: "3.2"
+ID: sto_fiori
+description: Fiori elements app
+version: 0.0.1
+modules:
+- name: sto_fiori-router
+  type: approuter.nodejs
+  path: router
+  requires:
+  - name: sto_fiori-html5-repo-runtime
+  - name: sto_fiori-uaa
+  - name: sto_fiori-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: sto_fiori-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: sto_fiori-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - fioristo.zip
+      name: fioristo
+      target-path: resources/
+- name: fioristo
+  type: html5
+  path: fiori_sto
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: sto_fiori-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: sto_fiori-${space-guid}
+    service: xsuaa
+    service-plan: application
+- name: sto_fiori-html5-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: sto_fiori-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: sto_fiori-destination-service
+    service-plan: lite
+- name: sto_fiori-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: sto_fiori-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm install

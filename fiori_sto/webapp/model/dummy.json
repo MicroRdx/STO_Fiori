@@ -1,0 +1,30 @@
+{
+    "combo1List": [
+        {
+            "label": "label1",
+            "value": 3
+        },
+        {
+            "label": "label2",
+            "value": 5
+        },
+        {
+            "label": "label3",
+            "value": 8
+        }
+    ],
+    "combo2List": [
+        {
+            "label": "label1",
+            "value": 3
+        },
+        {
+            "label": "label2",
+            "value": 5
+        },
+        {
+            "label": "label3",
+            "value": 8
+        }
+    ]
+}

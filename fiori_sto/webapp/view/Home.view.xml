@@ -1,0 +1,23 @@
+<mvc:View controllerName="fioristo.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+        <Text text="This is a home page"/>
+        			<ComboBox
+				items="{
+					path: '/combo1List'
+				
+				}">
+				<core:Item key="{key}" text="{text}" />
+			</ComboBox>
+                    			<ComboBox
+				items="{
+					path: '/combo2List'
+			
+				}">
+				<core:Item key="{key}" text="{text}" />
+			</ComboBox>
+        </content>
+    </Page>
+</mvc:View>
